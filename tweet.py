@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+_HOME_PATH = '/home/pi/tweet/'
 
 # Import modules
 from TwitterAPI import TwitterAPI
@@ -11,7 +12,7 @@ from TwitterActions import TA
 
 # Load config file
 config = ConfigParser.RawConfigParser()
-config.read('_config.cfg')
+config.read(_HOME_PATH + '_config.cfg')
 
 # Set up API
 api = TwitterAPI(
@@ -26,7 +27,7 @@ camera = picamera.PiCamera()
 # Get the last mention
 last_mention_id = config.get('mentions', 'last_id')
 
-# Gett al the mentions since the last mention
+# Get all the mentions since the last mention
 mentions = api.request('statuses/mentions_timeline', {'since_id': last_mention_id}).json()
 
 if mentions :
@@ -38,10 +39,12 @@ if mentions :
 		# Make a user
 		user = item['user']
 
-		# Get photo
-		filename = Graffcam(camera).capture_photo(user)
+		# Take a picture
+		graffcam = Graffcam(_HOME_PATH, camera)
+		media = graffcam.capture_photo(user)
 
-		media_upload = TA(api).upload_media(filename)
+		# Upload the media
+		media_upload = TA(_HOME_PATH, api).upload_media(media)
 
 		# Build the status and send
 		status = 'Hello @%s - here is a nice picture' % (user['screen_name'])
@@ -54,5 +57,5 @@ if mentions :
 	config.set('mentions', 'last_id', last_mention_id)
 
 	# Write the data
-	with open('_config.cfg', 'w') as f:
-	   config.write(f)
+	with open(_HOME_PATH + '_config.cfg', 'w') as f:
+	  config.write(f)
