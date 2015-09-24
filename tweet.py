@@ -38,24 +38,26 @@ if mentions :
 
 		# Make a user
 		user = item['user']
+		username = user['screen_name']
 
 		# Take a picture
 		graffcam = Graffcam(_HOME_PATH, camera)
-		media = graffcam.capture_photo(user)
+		#media = graffcam.capture_photo(username)
+		media = graffcam.record_video(username)
 
 		# Upload the media
-		media_upload = TA(_HOME_PATH, api).upload_media(media)
+		#media_upload = TA(_HOME_PATH, api).upload_image(media)
+		media_upload = TA(_HOME_PATH, api).upload_video(media)
 
 		# Build the status and send
-		status = 'Hello @%s - here is a nice picture' % (user['screen_name'])
-
-		if media_upload.status_code == 200:
-			media_id = media_upload.json()['media_id']
-			r = api.request('statuses/update', {'status':status, 'media_ids': media_id})
+		status = 'Hello @%s - here is a nice video' % (username)
+		print '[status: Posting]'
+		if media_upload.status_code > 199 or media_upload.status_code < 300:
+			r = api.request('statuses/update', {'status': status, 'in_reply_to_status_id': item['id'], 'media_ids': media_upload.json()['media_id']})
 			print r.json()
 
 	config.set('mentions', 'last_id', last_mention_id)
 
-	# Write the data
+	#Write the data
 	with open(_HOME_PATH + '_config.cfg', 'w') as f:
-	  config.write(f)
+	 config.write(f)

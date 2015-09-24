@@ -1,5 +1,6 @@
 import time
 import datetime
+import os
 
 class Graffcam():
 	# Initialise & set up the camera
@@ -16,7 +17,7 @@ class Graffcam():
 		self.camera.brightness = 50
 		self.camera.saturation = 0
 		self.camera.ISO = 0
-		self.camera.video_stabilization = True
+		self.camera.video_stabilization = False
 		self.camera.exposure_compensation = 0
 		self.camera.exposure_mode = 'auto'
 		self.camera.meter_mode = 'average'
@@ -28,19 +29,29 @@ class Graffcam():
 		self.camera.vflip = False
 		self.camera.crop = (0.0, 0.0, 1.0, 1.0)
 
-	def get_filename(self, user, folder):
-		filename = '%smedia/%s/%s-%s' % (self.home_path, folder, user['screen_name'], datetime.datetime.now())
+	def get_filename(self, user, folder, extension):
+		filename = '%smedia/%s/%s-%s.%s' % (self.home_path, folder, user, int(time.time()), extension)
+		filename.replace(' ', '-')
 		return filename
 
 
 	def capture_photo(self, user):
 		# Take a picture
-		filename = self.get_filename(user, 'images') + '.jpg'
+		filename = self.get_filename(user, 'images', 'jpg')
 		self.camera.capture(filename)
 		return filename
 
 	def record_video(self, user):
-		filename = self.get_filename(user)
-		camera.start_recording('video.h264')
-		sleep(5)
-		camera.stop_recording()
+		raw_file = self.get_filename(user, 'videos', 'h264')
+		processed_file = self.get_filename(user, 'videos', 'mp4')
+		print '[status: Recording]'
+		self.camera.start_recording(raw_file)
+		time.sleep(5)
+		print '[status: Stopping]'
+		self.camera.stop_recording()
+
+		print '[status: Converting]'
+		os.system('MP4Box -add %s %s' % (raw_file, processed_file))
+		print '[status: Deleting]'
+		os.remove(raw_file)
+		return processed_file
