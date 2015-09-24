@@ -4,8 +4,9 @@ import os
 
 class Graffcam():
 	# Initialise & set up the camera
-	def __init__(self, home_path, camera):
+	def __init__(self, home_path, camera, logging):
 		self.home_path = home_path
+		self.logging = logging
 
 		self.camera = camera
 		self.camera.resolution = (1280, 720)
@@ -37,6 +38,7 @@ class Graffcam():
 
 	def capture_photo(self, user):
 		# Take a picture
+		self.logging.info('Taking a picture')
 		filename = self.get_filename(user, 'images', 'jpg')
 		self.camera.capture(filename)
 		return filename
@@ -44,14 +46,18 @@ class Graffcam():
 	def record_video(self, user):
 		raw_file = self.get_filename(user, 'videos', 'h264')
 		processed_file = self.get_filename(user, 'videos', 'mp4')
-		print '[status: Recording]'
+
+		self.logging.info('Recording video')
 		self.camera.start_recording(raw_file)
-		time.sleep(5)
-		print '[status: Stopping]'
+		time.sleep(7)
+
+		self.logging.info('Stopping recording')
 		self.camera.stop_recording()
 
-		print '[status: Converting]'
+		self.logging.info('Converting video [%s]' % processed_file)
 		os.system('MP4Box -add %s %s' % (raw_file, processed_file))
-		print '[status: Deleting]'
+
+		self.logging.info('Deleting h264 video')
 		os.remove(raw_file)
+
 		return processed_file

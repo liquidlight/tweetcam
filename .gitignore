@@ -1,8 +1,9 @@
 # Config files
 _config.cfg
 
-# Media
+# Folders
 media/
+logs/
 
 # Python files
 *.pyc
