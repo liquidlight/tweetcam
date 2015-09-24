@@ -3,9 +3,11 @@
 # Import modules
 from TwitterAPI import TwitterAPI
 import ConfigParser
-import time
-import datetime
 import picamera
+
+# Custom Classes
+from Photo import Graffcam
+from TwitterActions import TA
 
 # Load config file
 config = ConfigParser.RawConfigParser()
@@ -19,6 +21,8 @@ api = TwitterAPI(
 	config.get('twitter', 'access_token_secret')
 )
 
+camera = picamera.PiCamera()
+
 # Get the last mention
 last_mention_id = config.get('mentions', 'last_id')
 
@@ -27,18 +31,6 @@ mentions = api.request('statuses/mentions_timeline', {'since_id': last_mention_i
 
 if mentions :
 
-	# Initialise & set up the camera
-	camera = picamera.PiCamera()
-	camera.resolution = (1280, 720)
-	camera.framerate = 30
-	time.sleep(2)
-	camera.shutter_speed = camera.exposure_speed
-	camera.exposure_mode = 'off'
-	g = camera.awb_gains
-	camera.awb_mode = 'off'
-	camera.awb_gains = g
-
-
 	for item in reversed(mentions):
 		# Set the last id to that tweet
 		last_mention_id = item['id']
@@ -46,23 +38,18 @@ if mentions :
 		# Make a user
 		user = item['user']
 
-		# Take a picture
-		filename = './media/images/%s-%s.jpg' % (user['screen_name'], datetime.datetime.now())
-		camera.capture(filename)
+		# Get photo
+		filename = Graffcam(camera).capture_photo(user)
 
-		# Upload a file
-		file = open(filename, 'rb')
-		data = file.read()
-		r = api.request('media/upload', None, {'media': data})
-		print vars(r)
+		media_upload = TA(api).upload_media(filename)
 
 		# Build the status and send
 		status = 'Hello @%s - here is a nice picture' % (user['screen_name'])
 
-		if r.status_code == 200:
-			media_id = r.json()['media_id']
+		if media_upload.status_code == 200:
+			media_id = media_upload.json()['media_id']
 			r = api.request('statuses/update', {'status':status, 'media_ids': media_id})
-			print vars(r)
+			print r.json()
 
 	config.set('mentions', 'last_id', last_mention_id)
 
