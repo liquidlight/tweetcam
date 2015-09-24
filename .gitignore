@@ -3,3 +3,6 @@ _config.cfg
 
 # Media
 media/
+
+# Python files
+*.pyc
