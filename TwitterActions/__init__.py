@@ -32,6 +32,7 @@ class TA():
 
 		self.logging.info('Uploading picture')
 		request = self.api.request('media/upload', None, {'media': data})
+		self.logging.info('Picture request: ' + request.json())
 		return request
 
 	def upload_video(self, filename):
@@ -41,14 +42,17 @@ class TA():
 
 		self.logging.info('Starting video upload')
 		request = self.api.request('media/upload', {'command':'INIT', 'media_type':'video/mp4', 'total_bytes': nbytes})
+		self.logging.info('Initial video upload request: ' + request.json())
 		self.check_status(request)
 
 		media_id = request.json()['media_id']
 		request = self.api.request('media/upload', {'command':'APPEND', 'media_id': media_id, 'segment_index':0}, {'media': data})
+		self.logging.info('Second video upload request: ' + request.json())
 		self.check_status(request)
 
 		self.logging.info('Finalising video upload')
 		request = self.api.request('media/upload', {'command':'FINALIZE', 'media_id': media_id})
+		self.logging.info('Finalising video upload request: ' + request.json())
 		self.check_status(request)
 
 		return request
