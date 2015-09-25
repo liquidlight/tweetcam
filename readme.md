@@ -3,7 +3,8 @@ Create a `_config.cfg`
 ```
 [setup]
 home_path = /path/to/folder
-debug_mode = True
+debug_mode = False
+twitter_username = USER
 
 [twitter_api]
 consumer_key = CONSUMER KET

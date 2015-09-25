@@ -10,6 +10,6 @@ if mentions:
 	for tweet in reversed(mentions):
 		g.ActionTweet(tweet)
 
-# for tweet in g.GetStream():
-# 	if 'text' in tweet:
-# 		g.ActionTweet(tweet)
+for tweet in g.GetStream():
+	if 'text' in tweet:
+		g.ActionTweet(tweet)

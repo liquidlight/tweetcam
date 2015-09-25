@@ -48,7 +48,7 @@ class GraffCam:
 		return stream
 
 	def ActionTweet(self, tweet):
-		print '[New Tweet]' + tweet['text']
+		print '[New Tweet] ' + tweet['text']
 
 		# Initialise the camera
 		script_main = self.script_main
@@ -62,31 +62,34 @@ class GraffCam:
 		user = tweet['user']
 		username = user['screen_name']
 
-		#Initialise custom classes
-		graffcam = Graffcam(self._HOME_PATH, self.camera, script_graffcam)
-		ta = TA(self._HOME_PATH, self.api, script_ta)
+		if username != self.config.get('setup', 'twitter_username'):
 
-		# If the tweet contains a photo trigger hashtag
-		if ta.is_photo(tweet):
-			media = graffcam.capture_photo(username)
-			media_upload = ta.upload_image(media)
-			status_pick = self.config.get('tweet_text', 'photo')
+			#Initialise custom classes
+			graffcam = Graffcam(self._HOME_PATH, self.camera, script_graffcam)
+			ta = TA(self._HOME_PATH, self.api, script_ta)
+	
+			# If the tweet contains a photo trigger hashtag
+			if ta.is_photo(tweet):
+				media = graffcam.capture_photo(username)
+				media_upload = ta.upload_image(media)
+				status_pick = self.config.get('tweet_text', 'photo')
+			else:
+				media = graffcam.record_video(username)
+				media_upload = ta.upload_video(media)
+				status_pick = self.config.get('tweet_text', 'video')
+	
+			# Build the status and send
+			status = random.choice(json.loads(status_pick))
+			status = status.replace('[[user]]', '@%s' % (username))
+	
+			if self._DEBUG_MODE == 'False':
+				if media_upload.status_code > 199 or media_upload.status_code < 300:
+					post = self.api.request('statuses/update', {'status': status, 'in_reply_to_status_id': tweet['id'], 'media_ids': media_upload.json()['media_id']})
+			else:
+				print 'Original tweet: %s' % (tweet['text'])
+				print 'Status: %s [media: %s] ' % (status, media)
 		else:
-			media = graffcam.record_video(username)
-			media_upload = ta.upload_video(media)
-			status_pick = self.config.get('tweet_text', 'video')
-
-		# Build the status and send
-		status = random.choice(json.loads(status_pick))
-		status = status.replace('[[user]]', '@%s' % (username))
-
-		if self._DEBUG_MODE == 'False':
-			if media_upload.status_code > 199 or media_upload.status_code < 300:
-				post = self.api.request('statuses/update', {'status': status, 'in_reply_to_status_id': tweet['id'], 'media_ids': media_upload.json()['media_id']})
-		else:
-			print 'Original tweet: %s' % (tweet['text'])
-			print 'Status: %s [media: %s] ' % (status, media)
-
+			print 'Tweet by Graffcam, not actioning anything'
 		# Update the last ID
 		if self._DEBUG_MODE == 'False':
 			self.config.set('tweets', 'last_mention_id', last_mention_id)
