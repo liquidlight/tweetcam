@@ -14,7 +14,6 @@ from TwitterActions import TA
 class GraffCam:
 
 	def __init__(self):
-
 		self.camera = picamera.PiCamera()
 
 		# SETUP: Include config file
@@ -44,7 +43,13 @@ class GraffCam:
 		mentions = self.api.request('statuses/mentions_timeline', {'since_id': last_mention_id}).json()
 		return mentions
 
+	def GetStream(self):
+		stream = self.api.request('user')
+		return stream
+
 	def ActionTweet(self, tweet):
+		print '[New Tweet]' + tweet['text']
+
 		# Initialise the camera
 		script_main = self.script_main
 		script_graffcam = self.script_graffcam
