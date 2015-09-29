@@ -1,0 +1,40 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          streamingtwitterbot
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: Stream Twitter Bot
+# Description:       Stream Twitter Bot
+### END INIT INFO
+
+do_start () {
+   sudo /usr/bin/python /home/pi/tweet/bot.py
+   exit 0
+}
+
+case "$1" in
+   start|"")
+      do_start
+      ;;
+   
+   restart|reload|force-reload)
+      echo "Error: argument '$1' not supported" >&2
+      exit 3
+   ;;
+
+   stop)
+      # No-op
+      ;;
+
+   status)
+      exit 0
+      ;;
+   *)
+      echo "Usage: streamingtwitterbot [start|stop]" >&2
+      exit 3
+      ;;
+esac
+:
