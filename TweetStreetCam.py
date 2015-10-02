@@ -92,6 +92,8 @@ class GraffCam:
 			if self._DEBUG_MODE == 'False':
 				if media_upload.status_code > 199 or media_upload.status_code < 300:
 					post = self.api.request('statuses/update', {'status': status, 'in_reply_to_status_id': tweet['id'], 'media_ids': media_upload.json()['media_id']})
+					if post.status_code > 199 or post.status_code < 300:
+						os.remove(media)
 			else:
 				print 'Original tweet: %s' % (tweet['text'])
 				print 'Status: %s [media: %s] ' % (status, media)
