@@ -29,7 +29,7 @@ Rename `_config.cfg.skel` to `_config.cfg` and update the values.
 - `setup`
 	- `debug_mode` - This stops the script from actually tweeting but output on the command line
 	- `twitter_username` - The username of your twitter bot
-- `tiwtter_api` - Your keys for the API app
+- `twitter_api` - Your keys for the API app
 - `tweets:last_mention_id` - This just needs to stay on 0, the script uses this to keep track of what tweets have been replied to
 - `tweet_text` - a list of dictionaries containing phrases that your bot can reply, if make sure they contain `[[user]]` to include the username
 	- `photo` - for when the bot takes a picture e.g. `["Looking good [[user]]!", "Very nice shoes [[user]]!"]`

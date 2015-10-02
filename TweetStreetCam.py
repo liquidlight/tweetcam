@@ -7,6 +7,7 @@ import logging
 import random
 import json
 import time
+import os
 
 # SETUP: Import Custom Classes
 from Photo import Graffcam
@@ -19,8 +20,8 @@ class GraffCam:
 
 		# SETUP: Include config file
 		self.config = ConfigParser.RawConfigParser()
-		self.config.read('/home/pi/streaming/_config.cfg')
-		self._HOME_PATH = self.config.get('setup', 'home_path')
+		self._HOME_PATH = os.path.dirname(os.path.abspath(__file__)) + '/'
+		self.config.read(self._HOME_PATH + '_config.cfg')
 		self._DEBUG_MODE = self.config.get('setup', 'debug_mode')
 
 		# SETUP: TwitterAPI (https://github.com/geduldig/TwitterAPI)
