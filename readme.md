@@ -1,6 +1,6 @@
 # Twitter Media Bot
 
-This is a Twitter bot which looks for metions - once someone tweets a mention, it will record a video (or take a picture), upload to Twitter and tweet it back to them as a reply. 
+This is a Twitter bot which looks for metions - once someone tweets a mention, it will record a video (or take a picture), upload to Twitter and tweet it back to them as a reply.
 
 Built for a project at work, where people can stand in front of the iconic Brighton graffiti and get a picture or video of them.
 
@@ -45,3 +45,23 @@ python bot.py
 ```
 
 It will go through any mentions the bot has and reply to them with a video (hopefully)
+
+#### Step 4: Set up the daemon
+
+Modify line 14 of `StreamingDaemon` to the correct path of your script. Copy it to `/etc/init.d` with a slightly more sensible name.
+
+```
+sudo cp StreamingDeamon /etc/init.d/StreamingTweets
+```
+
+Ensure the script is executable
+
+```
+sudo chmod +x /etc/init.d/StreamingTweets
+```
+
+And initalise it as a service
+
+```
+sudo insserv /etc/init.d/StreamingTweets
+```

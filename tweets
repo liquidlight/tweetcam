@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          streamingtwitterbot
+# Provides:          tweets 
 # Required-Start:
 # Required-Stop:
 # Should-Start:
@@ -11,7 +11,7 @@
 ### END INIT INFO
 
 do_start () {
-   sudo /usr/bin/python /home/pi/tweet/bot.py
+   nohup python /home/pi/tweet/bot.py > /var/log/StreamingTweets 2>&1 &
    exit 0
 }
 
@@ -33,7 +33,7 @@ case "$1" in
       exit 0
       ;;
    *)
-      echo "Usage: streamingtwitterbot [start|stop]" >&2
+      echo "Usage: tweets [start|stop]" >&2
       exit 3
       ;;
 esac
