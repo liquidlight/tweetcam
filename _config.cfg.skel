@@ -1,0 +1,18 @@
+[setup]
+debug_mode = False
+twitter_username = 
+
+[twitter_api]
+consumer_key =
+consumer_secret =
+access_token_key =
+access_token_secret =
+
+[tweets]
+last_mention_id = 0
+
+[tweet_text]
+preperation = ["[[user]] - get ready, filming will begin in 5 seconds!", "[[user]] I hope you're ready to be filmed in 5 seconds"]
+photo = ["Looking good [[user]]!", "Very nice shoes [[user]]!"]
+video = ["Here is your short [[user]]", "Enjoy your film [[user]]"]
+
