@@ -77,11 +77,11 @@ class GraffCam:
 
 			# If the tweet contains a photo trigger hashtag
 			if ta.is_photo(tweet):
-				media = graffcam.capture_photo(username)
+				media = graffcam.capture_photo(tweet)
 				media_upload = ta.upload_image(media)
 				status_pick = self.config.get('tweet_text', 'photo')
 			else:
-				media = graffcam.record_video(username)
+				media = graffcam.record_video(tweet)
 				media_upload = ta.upload_video(media)
 				status_pick = self.config.get('tweet_text', 'video')
 

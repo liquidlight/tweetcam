@@ -51,17 +51,17 @@ It will go through any mentions the bot has and reply to them with a video (hope
 Modify line 14 of `StreamingDaemon` to the correct path of your script. Copy it to `/etc/init.d` with a slightly more sensible name.
 
 ```
-sudo cp StreamingDeamon /etc/init.d/StreamingTweets
+sudo cp tweets /etc/init.d/tweets
 ```
 
 Ensure the script is executable
 
 ```
-sudo chmod +x /etc/init.d/StreamingTweets
+sudo chmod +x /etc/init.d/tweets
 ```
 
 And initalise it as a service
 
 ```
-sudo insserv /etc/init.d/StreamingTweets
+sudo insserv /etc/init.d/tweets
 ```

@@ -30,22 +30,21 @@ class Graffcam():
 		self.camera.vflip = False
 		self.camera.crop = (0.0, 0.0, 1.0, 1.0)
 
-	def get_filename(self, user, folder, extension):
-		filename = '%smedia/%s/%s-%s.%s' % (self.home_path, folder, user, int(time.time()), extension)
-		filename.replace(' ', '-')
+	def get_filename(self, tweet, folder, extension):
+		filename = '%smedia/%s/%s.%s' % (self.home_path, folder, tweet['id'], extension)
 		return filename
 
 
-	def capture_photo(self, user):
+	def capture_photo(self, tweet):
 		# Take a picture
 		self.logging.info('Taking a picture')
-		filename = self.get_filename(user, 'images', 'jpg')
+		filename = self.get_filename(tweet, 'images', 'jpg')
 		self.camera.capture(filename)
 		return filename
 
-	def record_video(self, user):
-		raw_file = self.get_filename(user, 'videos', 'h264')
-		processed_file = self.get_filename(user, 'videos', 'mp4')
+	def record_video(self, tweet):
+		raw_file = self.get_filename(tweet, 'videos', 'h264')
+		processed_file = self.get_filename(tweet, 'videos', 'mp4')
 
 		self.logging.info('Recording video')
 		self.camera.start_recording(raw_file)
