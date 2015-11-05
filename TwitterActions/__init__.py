@@ -10,6 +10,7 @@ class TA():
 		self.logging = logging
 
 	def check_status(self, request):
+		print request.text
 		if request.status_code < 200 or request.status_code > 299:
 			print(request.status_code)
 			print(request.text)
@@ -36,20 +37,31 @@ class TA():
 		return request
 
 	def upload_video(self, filename):
-		nbytes = os.path.getsize(filename)
+		# Upload a video
+		bytes_sent = 0
+		total_bytes = os.path.getsize(filename)
 		file = open(filename, 'rb')
-		data = file.read()
 
-		self.logging.info('Starting video upload')
-		request = self.api.request('media/upload', {'command':'INIT', 'media_type':'video/mp4', 'total_bytes': nbytes})
+		# Initial request
+		request = self.api.request('media/upload', {'command':'INIT', 'media_type':'video/mp4', 'total_bytes':total_bytes})
 		self.check_status(request)
 
 		media_id = request.json()['media_id']
-		request = self.api.request('media/upload', {'command':'APPEND', 'media_id': media_id, 'segment_index':0}, {'media': data})
-		self.check_status(request)
+		segment_id = 0
 
-		self.logging.info('Finalising video upload')
-		request = self.api.request('media/upload', {'command':'FINALIZE', 'media_id': media_id})
+		# Chunk and upload video
+		while bytes_sent < total_bytes:
+			chunk = file.read(4*1024*1024)
+
+			request = self.api.request('media/upload', {'command':'APPEND', 'media_id':media_id, 'segment_index':segment_id}, {'media':chunk})
+			self.check_status(request)
+
+			segment_id = segment_id + 1
+			bytes_sent = file.tell()
+
+			print('[' + str(total_bytes) + ']', str(bytes_sent))
+
+		request = self.api.request('media/upload', {'command':'FINALIZE', 'media_id':media_id})
 		self.check_status(request)
 
 		return request
