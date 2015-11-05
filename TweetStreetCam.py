@@ -65,11 +65,13 @@ class GraffCam:
 		username = user['screen_name']
 
 		if username != self.config.get('setup', 'twitter_username'):
-
-			start_status = random.choice(json.loads(self.config.get('tweet_text', 'preperation')))
-			start_status = start_status.replace('[[user]]', '@%s' % (username))
-			start_post = self.api.request('statuses/update', {'status': start_status, 'in_reply_to_status_id': tweet['id']})
-			time.sleep(5)
+			if self._DEBUG_MODE == 'False':
+				start_status = random.choice(json.loads(self.config.get('tweet_text', 'preperation')))
+				start_status = start_status.replace('[[user]]', '@%s' % (username))
+				start_post = self.api.request('statuses/update', {'status': start_status, 'in_reply_to_status_id': tweet['id']})
+				time.sleep(5)
+			else:
+				print 'Preperation tweet: %s' % (start_status)
 
 			#Initialise custom classes
 			graffcam = Graffcam(self._HOME_PATH, self.camera, script_graffcam)
