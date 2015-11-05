@@ -68,3 +68,27 @@ And initalise it as a service
 ```
 sudo insserv /etc/init.d/tweets
 ```
+
+Now you can run
+
+```
+sudo service tweets start
+```
+
+#### Step 5: Set up the cron
+
+You can set up a cron job to run every 15 minutes or so to check the service is running. If it is, do nothing. If it's stopped for whateve reason, start it again.
+
+Edit the crontab
+
+```
+sudo crontab -e
+```
+
+And add this to the bottom
+
+```
+*/15 * * * * sudo sudo /bin/sh /home/pi/tweet/servicecheck.sh
+```
+
+This will run the service check script every 15 minutes - restarting the process if it's not running
