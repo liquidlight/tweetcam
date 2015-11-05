@@ -2,7 +2,7 @@ import time
 import datetime
 import os
 
-class Graffcam():
+class TweetCam():
 	# Initialise & set up the camera
 	def __init__(self, home_path, camera, logging):
 		self.home_path = home_path
@@ -48,7 +48,7 @@ class Graffcam():
 
 		self.logging.info('Recording video')
 		self.camera.start_recording(raw_file)
-		time.sleep(7)
+		time.sleep(5)
 
 		self.logging.info('Stopping recording')
 		self.camera.stop_recording()

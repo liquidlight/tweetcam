@@ -10,7 +10,7 @@ import time
 import os
 
 # SETUP: Import Custom Classes
-from Photo import Graffcam
+from TweetCam import TweetCam
 from TwitterActions import TA
 
 class GraffCam:
@@ -40,7 +40,7 @@ class GraffCam:
 		logfile_name = self._HOME_PATH + 'logs/' + str(now.year) + '-' + str(now.isocalendar()[1]) + '.log'
 		logging.basicConfig(filename = logfile_name, level = logging.INFO, format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 		self.script_main = logging.getLogger('main')
-		self.script_graffcam = logging.getLogger('graffcam')
+		self.script_tweetcam = logging.getLogger('tweetcam')
 		self.script_ta = logging.getLogger('ta')
 
 	def PickStatus(self, status_group):
@@ -62,7 +62,7 @@ class GraffCam:
 
 		# Initialise the camera
 		script_main = self.script_main
-		script_graffcam = self.script_graffcam
+		script_tweetcam = self.script_tweetcam
 		script_ta = self.script_ta
 
 		# Work out time difference of tweet & get tweet ID
@@ -90,16 +90,16 @@ class GraffCam:
 					print 'Preperation tweet: %s' % (start_status)
 
 				#Initialise custom classes
-				graffcam = Graffcam(self._HOME_PATH, self.camera, script_graffcam)
+				tweetcam = TweetCam(self._HOME_PATH, self.camera, script_tweetcam)
 				ta = TA(self._HOME_PATH, self.api, script_ta)
 
 				# If the tweet contains a photo trigger hashtag
 				if ta.is_photo(tweet):
-					media = graffcam.capture_photo(tweet)
+					media = tweetcam.capture_photo(tweet)
 					media_upload = ta.upload_image(media)
 					status_pick = 'photo'
 				else:
-					media = graffcam.record_video(tweet)
+					media = tweetcam.record_video(tweet)
 					media_upload = ta.upload_video(media)
 					status_pick = 'video'
 
