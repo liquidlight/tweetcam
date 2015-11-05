@@ -54,7 +54,7 @@ class GraffCam:
 		return mentions
 
 	def GetStream(self):
-		stream = self.api.request('user')
+		stream = self.api.request('user', {'with': 'user'})
 		return stream
 
 	def ActionTweet(self, tweet):
