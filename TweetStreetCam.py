@@ -24,6 +24,9 @@ class GraffCam:
 		self.config.read(self._HOME_PATH + '_config.cfg')
 		self._DEBUG_MODE = self.config.get('setup', 'debug_mode')
 
+		# Set the user as a global proerty
+		self.user = ''
+
 		# SETUP: TwitterAPI (https://github.com/geduldig/TwitterAPI)
 		self.api = TwitterAPI(
 			self.config.get('twitter_api', 'consumer_key'),
@@ -39,6 +42,11 @@ class GraffCam:
 		self.script_main = logging.getLogger('main')
 		self.script_graffcam = logging.getLogger('graffcam')
 		self.script_ta = logging.getLogger('ta')
+
+	def PickStatus(self, status_group):
+		status = random.choice(json.loads(self.config.get('tweet_text', status_group)))
+		status = status.replace('[[user]]', '@%s' % (self.user['screen_name']))
+		return status
 
 	def GetMentions(self):
 		last_mention_id = self.config.get('tweets', 'last_mention_id')
@@ -64,18 +72,16 @@ class GraffCam:
 		time_tweet_difference = (current_time - tweet_time).seconds / 60
 
 		# Make a user
-		user = tweet['user']
-		username = user['screen_name']
+		self.user = tweet['user']
 
 		# If the username is not itself
-		if username != self.config.get('setup', 'twitter_username'):
+		if self.user['screen_name'] != self.config.get('setup', 'twitter_username'):
 
 			# If it's bigger than config option - don't record
 			if int(time_tweet_difference) <= int(self.config.get('options', 'tweet_difference_limit')):
 
 				# Get a prerpation tweet text
-				start_status = random.choice(json.loads(self.config.get('tweet_text', 'preperation')))
-				start_status = start_status.replace('[[user]]', '@%s' % (username))
+				start_status = self.PickStatus('preperation')
 
 				if self._DEBUG_MODE == 'False':
 					start_post = self.api.request('statuses/update', {'status': start_status, 'in_reply_to_status_id': tweet['id']})
@@ -91,15 +97,14 @@ class GraffCam:
 				if ta.is_photo(tweet):
 					media = graffcam.capture_photo(tweet)
 					media_upload = ta.upload_image(media)
-					status_pick = self.config.get('tweet_text', 'photo')
+					status_pick = 'photo'
 				else:
 					media = graffcam.record_video(tweet)
 					media_upload = ta.upload_video(media)
-					status_pick = self.config.get('tweet_text', 'video')
+					status_pick = 'video'
 
 				# Build the status and send
-				status = random.choice(json.loads(status_pick))
-				status = status.replace('[[user]]', '@%s' % (username))
+				status = self.PickStatus(status_pick)
 
 				if self._DEBUG_MODE == 'False':
 					if media_upload.status_code > 199 or media_upload.status_code < 300:
@@ -112,8 +117,7 @@ class GraffCam:
 			else:
 
 				# Prepare the late text
-				late_status = random.choice(json.loads(self.config.get('tweet_text', 'late')))
-				late_status = late_status.replace('[[user]]', '@%s' % (username))
+				late_status = self.PickStatus('late')
 
 				if self._DEBUG_MODE == 'False':
 					late_post = self.api.request('statuses/update', {'status': late_status, 'in_reply_to_status_id': tweet['id']})
