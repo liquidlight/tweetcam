@@ -7,7 +7,7 @@ g = TweetStreetCam.GraffCam()
 mentions = g.GetMentions()
 
 if mentions:
-	for tweet in reversed(mentions):
+	for tweet in mentions:
 		g.ActionTweet(tweet)
 
 for tweet in g.GetStream():
