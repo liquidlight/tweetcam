@@ -51,6 +51,7 @@ class GraffCam:
 	def GetMentions(self):
 		last_mention_id = self.config.get('tweets', 'last_mention_id')
 		mentions = self.api.request('statuses/mentions_timeline', {'since_id': last_mention_id}).json()
+        	mentions = sorted(mentions, key=lambda k:k['id'])
 		return mentions
 
 	def GetStream(self):
