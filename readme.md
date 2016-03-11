@@ -24,7 +24,7 @@ Download the code and put it in somewhere like `/home/pi/tweetcam`
 
 #### Step 2: Set up config file
 
-Rename `_config.cfg.skel` to `_config.cfg` and update the values.
+Copy `_config.cfg.skel`, rename to `_config.cfg` and update the values.
 
 - `setup`
 	- `debug_mode` - This stops the script from actually tweeting but output on the command line
@@ -46,7 +46,7 @@ Run the `bot.py` script manually to make sure everything is OK.
 python bot.py
 ```
 
-It will go through any mentions the bot has and reply to them with a video (hopefully)
+This should loop through any mentions and, if less than your previously defined `tweet_difference_limit`, will reply with a video. Otherwise, it will reply with an apology. 
 
 #### Step 4: Set up the daemon
 
