@@ -32,7 +32,6 @@ Rename `_config.cfg.skel` to `_config.cfg` and update the values.
 - `options`
 	- `tweet_difference_limit` - Time (in minutes) for the cutoff for replying to tweets (e.g. if it is over this it won't reply)
 - `twitter_api` - Your keys for the API app
-- `tweets:last_mention_id` - This just needs to stay on 0, the script uses this to keep track of what tweets have been replied to
 - `tweet_text` - a list of dictionaries containing phrases that your bot can reply, if make sure they contain `[[user]]` to include the username
 	- `photo` - for when the bot takes a picture
 	- `video` - for status with video

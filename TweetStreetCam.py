@@ -49,10 +49,20 @@ class GraffCam:
 		return status
 
 	def GetMentions(self):
+		if self.config.has_section('tweets') == False:
+			self.config.add_section('tweets')
+			with open(self._HOME_PATH + '_config.cfg', 'w') as f:
+				self.config.write(f)
+
+		if (self.config.has_option('tweets', 'last_mention_id') == False) or (int(self.config.get('tweets', 'last_mention_id')) < 1):
+			self.config.set('tweets', 'last_mention_id', 1)
+			with open(self._HOME_PATH + '_config.cfg', 'w') as f:
+				self.config.write(f)
+
 		last_mention_id = self.config.get('tweets', 'last_mention_id')
 		mentions = self.api.request('statuses/mentions_timeline', {'since_id': last_mention_id}).json()
-        	mentions = sorted(mentions, key=lambda k:k['id'])
-		return mentions
+		mentions = sorted(mentions, key=lambda k:k['id'])
+		print mentions
 
 	def GetStream(self):
 		stream = self.api.request('user', {'with': 'user'})

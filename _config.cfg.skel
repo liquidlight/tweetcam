@@ -1,6 +1,6 @@
 [setup]
 debug_mode = False
-twitter_username = 
+twitter_username =
 
 [options]
 tweet_difference_limit = 3
@@ -10,9 +10,6 @@ consumer_key =
 consumer_secret =
 access_token_key =
 access_token_secret =
-
-[tweets]
-last_mention_id = 0
 
 [tweet_text]
 preperation = ["[[user]] - get ready, filming will begin in 5 seconds!", "[[user]] I hope you're ready to be filmed in 5 seconds"]
