@@ -3,7 +3,7 @@
 # SETUP: Import global modules
 import TweetStreetCam
 
-g = TweetStreetCam.GraffCam()
+g = TweetStreetCam.RaspPiTweetCam()
 mentions = g.GetMentions()
 
 if mentions:

@@ -14,5 +14,5 @@ access_token_secret =
 [tweet_text]
 preperation = ["[[user]] - get ready, filming will begin in 5 seconds!", "[[user]] I hope you're ready to be filmed in 5 seconds"]
 photo = ["Looking good [[user]]!", "Very nice shoes [[user]]!"]
-video = ["Here is your #graffcam short [[user]]", "Enjoy your film [[user]]"]
+video = ["Here is your video short [[user]]", "Enjoy your film [[user]]"]
 late = ["Sorry [[user]] I was busy and didn't see your tweet - try again?"]

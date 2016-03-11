@@ -13,7 +13,7 @@ import os
 from TweetCam import TweetCam
 from TwitterActions import TA
 
-class GraffCam:
+class RaspPiTweetCam:
 
 	def __init__(self):
 		self.camera = picamera.PiCamera()
@@ -141,4 +141,4 @@ class GraffCam:
 				with open(self._HOME_PATH + '_config.cfg', 'w') as f:
 					self.config.write(f)
 		else:
-			print 'Tweet by Graffcam, not actioning anything'
+			print 'Tweet by myself, not actioning anything'

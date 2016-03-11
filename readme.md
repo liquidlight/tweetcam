@@ -12,7 +12,7 @@ This runs on a Raspberry Pi with a standard Camera Module. As it only uses Pytho
 
 ## Status
 
-If you run into any problems (or suggestions) then please add a [Github Issue](https://github.com/liquidlight/graffcam/issues)
+If you run into any problems (or suggestions) then please add a [Github Issue](https://github.com/liquidlight/tweetcam/issues)
 
 ## Installation
 
