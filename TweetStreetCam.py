@@ -62,7 +62,7 @@ class RaspPiTweetCam:
 		last_mention_id = self.config.get('tweets', 'last_mention_id')
 		mentions = self.api.request('statuses/mentions_timeline', {'since_id': last_mention_id}).json()
 		mentions = sorted(mentions, key=lambda k:k['id'])
-		print mentions
+		return mentions
 
 	def GetStream(self):
 		stream = self.api.request('user', {'with': 'user'})
