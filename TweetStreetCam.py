@@ -69,7 +69,8 @@ class RaspPiTweetCam:
 		return stream
 
 	def ActionTweet(self, tweet):
-		print '[New Tweet] ' + tweet['text']
+		tweet_text = tweet['text'].encode('ascii', 'ignore')
+		print '[New Tweet] ' + tweet_text
 
 		# Initialise the camera
 		script_main = self.script_main
