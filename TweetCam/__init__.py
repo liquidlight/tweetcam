@@ -28,7 +28,7 @@ class TweetCam():
 		self.camera.rotation = 0
 		self.camera.hflip = False
 		self.camera.vflip = False
-		self.camera.crop = (0.0, 0.0, 1.0, 1.0)
+		self.camera.crop = (0.1, 0.1, 1.0, 1.0)
 
 	def get_filename(self, tweet, folder, extension):
 		filename = '%smedia/%s/%s.%s' % (self.home_path, folder, tweet['id'], extension)
